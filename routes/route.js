@@ -6,7 +6,8 @@ const Ecom = require('../models/model')
 router.get('/', async(req,res) => {
     try{
            const ecoms = await Ecom.find()
-           res.json(ecoms)
+           res.status(200).json(ecoms)
+           
     }catch(err){
         res.send('Error ' + err)
     }
@@ -15,7 +16,7 @@ router.get('/', async(req,res) => {
 router.get('/:id', async(req,res) => {
     try{
            const ecom = await Ecom.findById(req.params.id)
-           res.json(ecom)
+           res.status(200).json(ecom)
     }catch(err){
         res.send('Error ' + err)
     }
@@ -32,7 +33,7 @@ router.post('/', async(req,res) => {
 
     try{
         const x =  await ecoms.save() 
-        res.json(x)
+        res.status(201).json(x)
     }catch(err){
         res.send('Error')
     }
@@ -41,9 +42,10 @@ router.post('/', async(req,res) => {
 router.put('/:id',async(req,res)=> {
     try{
         const ecom = await Ecom.findById(req.params.id) 
+        ecom.price = req.body.price
         ecom.quantity = req.body.quantity
         const x = await ecom.save()
-        res.json(x)   
+        res.status(200).json(x)   
     }catch(err){
         res.send('Error')
     }
@@ -52,10 +54,8 @@ router.put('/:id',async(req,res)=> {
 
 router.delete('/:id',async(req,res)=> {
     try{
-        const ecom = await Ecom.findById(req.params.id) 
-        ecom.quantity = req.body.quantity
-        const x = await ecom.save()
-        res.json(x)   
+        const ecom = await Ecom.findByIdAndRemove(req.params.id)
+        res.status(204).json(ecom)
     }catch(err){
         res.send('Error')
     }
